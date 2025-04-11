@@ -1,5 +1,6 @@
+# ChatBot
 from flask import Flask, request, jsonify
-import google.generativeai as genai  # type: ignore
+import google.generativeai as genai  # type: ignore 
 import os
 from datetime import datetime
 import logging
