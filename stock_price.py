@@ -2,13 +2,13 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import yfinance as yf
-import mplfinance as mpf
 import requests
 from datetime import datetime
 from keras.models import load_model #type: ignore
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 from stock_alert import send_stock_alert
+import mplfinance as mpf
 
 # Add Gemini API imports
 import google.generativeai as genai
@@ -41,7 +41,7 @@ def initialize_gemini(max_retries=3, retry_delay=5):
                 
             if not api_key:
                 logger.error("GEMINI_API_KEY not found in environment or secrets")
-                return None
+                return None, None
                 
             genai.configure(api_key=api_key)
             
@@ -349,9 +349,10 @@ st.markdown("</div>", unsafe_allow_html=True)
 with st.expander("📜 View Latest 100 Days of Stock Data"):
     st.dataframe(data.tail(100), use_container_width=True)
 
+
 # -------------------- Candlestick Chart --------------------
 st.markdown("<div class='stock-card'>", unsafe_allow_html=True)
-st.subheader("🕯️ Candlestick Chart")
+st.subheader("🕯 Candlestick Chart")
 
 # ✅ Fix for MultiIndex columns (e.g., ('Open', 'TSLA'))
 if isinstance(data.columns, pd.MultiIndex):
@@ -379,6 +380,7 @@ fig_candle, _ = mpf.plot(
 
 st.pyplot(fig_candle)
 st.markdown("</div>", unsafe_allow_html=True)
+
 
 # -------------------- Close Price Line Chart --------------------
 st.markdown("<div class='stock-card'>", unsafe_allow_html=True)
