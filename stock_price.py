@@ -421,7 +421,13 @@ except Exception as e:
 # -------------------- Fetch Stock Data --------------------
 end = datetime.now()
 start = datetime(end.year - 10, end.month, end.day)
-data = yf.download(stock, start=start, end=end)
+@st.cache_data(ttl=3600)
+def load_stock_data(stock, start, end):
+    time.sleep(2)  # Yahoo rate-limit se bachne ke liye
+    return yf.download(stock, start=start, end=end)
+
+data = load_stock_data(stock, start, end)
+
 
 if data.empty:
     st.error(f"No data found for symbol '{stock}'.")
